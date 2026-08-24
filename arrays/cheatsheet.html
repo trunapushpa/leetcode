@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Array Ladder</title>
+<meta name="description" content="All 28 problems from Striver's Arrays playlist, ordered simple to tricky, with the algorithm and the one gotcha to remember for each.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #EEF0EA;
+    --surface: #FBFBF8;
+    --surface-raised: #FFFFFF;
+    --ink: #1C231F;
+    --ink-muted: #5B665F;
+    --ink-faint: #8A938C;
+    --line: #D8DBCF;
+    --line-strong: #BEC4B4;
+    --accent: #1F6F63;
+    --accent-ink: #0E4A41;
+    --accent-soft: #DCEAE4;
+    --amber: #9C5A17;
+    --amber-soft: #F3E3CC;
+
+    --easy: #2F7A4F;
+    --easy-soft: #DEEDE1;
+    --core: #9C5A17;
+    --core-soft: #F3E3CC;
+    --comb: #6A4A9C;
+    --comb-soft: #E9E1F5;
+    --hard: #A6333F;
+    --hard-soft: #F5DEDF;
+
+    --shadow: 0 1px 2px rgba(28,35,31,0.06), 0 6px 20px -8px rgba(28,35,31,0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #131714;
+      --surface: #191E1A;
+      --surface-raised: #1F2521;
+      --ink: #E7EAE3;
+      --ink-muted: #9BA69C;
+      --ink-faint: #6D786F;
+      --line: #2B322C;
+      --line-strong: #3A4239;
+      --accent: #5FC2AC;
+      --accent-ink: #A9E4D5;
+      --accent-soft: #1E3530;
+      --amber: #E3A458;
+      --amber-soft: #3A2E1B;
+
+      --easy: #6BBF8C;
+      --easy-soft: #1E3226;
+      --core: #E3A458;
+      --core-soft: #362A18;
+      --comb: #B49AE8;
+      --comb-soft: #2C2440;
+      --hard: #E38A93;
+      --hard-soft: #3A2226;
+
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -10px rgba(0,0,0,0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #131714;
+    --surface: #191E1A;
+    --surface-raised: #1F2521;
+    --ink: #E7EAE3;
+    --ink-muted: #9BA69C;
+    --ink-faint: #6D786F;
+    --line: #2B322C;
+    --line-strong: #3A4239;
+    --accent: #5FC2AC;
+    --accent-ink: #A9E4D5;
+    --accent-soft: #1E3530;
+    --amber: #E3A458;
+    --amber-soft: #3A2E1B;
+
+    --easy: #6BBF8C;
+    --easy-soft: #1E3226;
+    --core: #E3A458;
+    --core-soft: #362A18;
+    --comb: #B49AE8;
+    --comb-soft: #2C2440;
+    --hard: #E38A93;
+    --hard-soft: #3A2226;
+
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -10px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  a { color: var(--accent-ink); }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+  }
+
+  /* ---------- Header ---------- */
+  header.hero {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding-bottom: 2.75rem;
+    margin-bottom: 2.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  h1.title {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(2.2rem, 5vw, 3.1rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  .dek {
+    max-width: 62ch;
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .source-line {
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+    align-items: center;
+    margin-top: 0.4rem;
+  }
+  .source-line a { color: var(--ink-muted); text-decoration-color: var(--line-strong); }
+
+  /* ---------- Rungs (tier sections) ---------- */
+  .rung {
+    margin-bottom: 3.25rem;
+  }
+
+  .rung-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.2rem 1rem;
+    align-items: baseline;
+    margin-bottom: 1.3rem;
+  }
+
+  .rung-num {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rung-title {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 0;
+    grid-column: 1 / -1;
+    color: var(--ink);
+  }
+
+  .rung-note {
+    grid-column: 1 / -1;
+    font-size: 0.92rem;
+    color: var(--ink-muted);
+    max-width: 68ch;
+  }
+
+  .rung[data-tier="easy"] .rung-title { color: var(--easy); }
+  .rung[data-tier="core"] .rung-title { color: var(--core); }
+  .rung[data-tier="comb"] .rung-title { color: var(--comb); }
+  .rung[data-tier="hard"] .rung-title { color: var(--hard); }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ---------- Card ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.1rem 1.2rem 1.2rem;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 1.5rem;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .idx {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+  .rung[data-tier="easy"] .idx { color: var(--easy); }
+  .rung[data-tier="core"] .idx { color: var(--core); }
+  .rung[data-tier="comb"] .idx { color: var(--comb); }
+  .rung[data-tier="hard"] .idx { color: var(--hard); }
+
+  .card h3 {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    margin: 0;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .tag {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    white-space: nowrap;
+  }
+
+  .idea {
+    font-size: 0.91rem;
+    color: var(--ink);
+    margin: 0 0 0.65rem;
+  }
+  .idea b { font-weight: 600; }
+
+  .idea code {
+    font-size: 0.83em;
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    padding: 0.03em 0.35em;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+
+  .nuance {
+    display: flex;
+    gap: 0.65rem;
+    padding: 0.55rem 0.75rem;
+    background: var(--amber-soft);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .nuance .label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .nuance p {
+    margin: 0;
+    font-size: 0.87rem;
+    color: var(--ink);
+  }
+
+  /* ---------- Patterns index ---------- */
+  .patterns {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .patterns h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .patterns > p {
+    color: var(--ink-muted);
+    max-width: 66ch;
+    margin: 0 0 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .ptable {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .prow {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) 1fr;
+    gap: 1rem 1.5rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+
+  .prow .pname {
+    font-weight: 600;
+    font-size: 0.94rem;
+    color: var(--ink);
+  }
+
+  .prow .plinks {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    margin-top: 0.3rem;
+  }
+  .prow .plinks a {
+    color: var(--ink-faint);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--line-strong);
+  }
+  .prow .plinks a:hover { color: var(--accent-ink); border-bottom-color: var(--accent); }
+
+  .prow .pdesc {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 3.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { transition: box-shadow 0.15s ease, transform 0.15s ease; }
+    .card:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(28,35,31,0.08), 0 10px 26px -10px rgba(28,35,31,0.18); }
+  }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 2.75rem 1.1rem 4rem; }
+    .prow { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Striver &middot; take U forward &nbsp;/&nbsp; Arrays Playlist &nbsp;/&nbsp; 28 problems</div>
+    <h1 class="title">The Array Ladder</h1>
+    <p class="dek">Every question in the playlist, kept in its original order — simple warm-ups at the bottom, merge-sort-flavored hard mode at the top. For each: the algorithm to reach for, and the one detail that actually trips people up.</p>
+    <div class="source-line">
+      <span>Source:</span>
+      <a href="https://www.youtube.com/playlist?list=PLgUwDviBIf0rENwdL0nEH0uGom9no0nyB" target="_blank" rel="noopener">Arrays Playlist | Basics to Advanced — take U forward</a>
+      <span>&middot;</span>
+      <a href="cheatsheet.md">Plain-Markdown version</a>
+      <span>&middot;</span>
+      <a href="https://github.com/trunapushpa/leetcode/tree/main/arrays" target="_blank" rel="noopener">Solutions in this repo</a>
+    </div>
+  </header>
+
+  <!-- ================= RUNG 1 ================= -->
+  <section class="rung" data-tier="easy" id="rung-1">
+    <div class="rung-head">
+      <span class="rung-num">Rung 1</span>
+      <h2 class="rung-title">Warm-up — single pass &amp; two pointers</h2>
+      <p class="rung-note">Nothing here needs a data structure fancier than a running variable or a second index. The skill being built is discipline: one clean left-to-right (or converging) pass instead of nested loops.</p>
+    </div>
+    <div class="cards">
+
+      <article class="card" id="p1">
+        <div class="card-head"><span class="idx">01</span><h3>Second Largest Element &amp; Remove Duplicates (sorted)</h3></div>
+        <div class="tags"><span class="tag">single pass</span><span class="tag">two pointer</span></div>
+        <p class="idea">Track largest and second-largest in one scan. For duplicates in a <em>sorted</em> array — they're always adjacent — an insert-pointer overwrites them in place.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Second-largest ≠ "the second one you see." Update it only when a new largest appears (demote the old largest into it) or a value lands strictly between the two. Sorting first works but burns <code>O(n log n)</code> on an <code>O(n)</code> problem.</p></div>
+      </article>
+
+      <article class="card" id="p2">
+        <div class="card-head"><span class="idx">02</span><h3>Rotate by K &middot; Union/Intersection &middot; Move Zeroes</h3></div>
+        <div class="tags"><span class="tag">reversal trick</span><span class="tag">merge pointers</span></div>
+        <p class="idea">Rotation: reverse the whole array, then reverse the first <code>k</code> and remaining <code>n-k</code> separately — three reversals, <code>O(n)</code>/<code>O(1)</code>. Union/intersection: walk both sorted arrays with two pointers, advancing the smaller side. Move zeroes: a slow pointer marks where the next nonzero gets written.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Always take <code>k % n</code> first — a <code>k</code> bigger than <code>n</code> is a silent bug. Intersection advances <em>both</em> pointers on a match; union only the smaller. Move-zeroes must swap, not overwrite, or relative order breaks.</p></div>
+      </article>
+
+      <article class="card" id="p3">
+        <div class="card-head"><span class="idx">03</span><h3>Appears Once &middot; Missing Number &middot; Max Consecutive Ones</h3></div>
+        <div class="tags"><span class="tag">XOR trick</span><span class="tag">running counter</span></div>
+        <p class="idea">XOR-ing every element cancels all pairs, leaving the singleton (<code>a^a=0</code>, <code>a^0=a</code>). Missing number: XOR <code>0..n</code> against the array, or <code>n(n+1)/2 - sum(arr)</code>.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>The sum formula overflows for large <code>n</code> <em>before</em> the subtraction lands; XOR never overflows — that's the real reason interviewers push for it, not elegance. For max-consecutive-ones, don't forget to check the final run after the loop exits.</p></div>
+      </article>
+
+      <article class="card" id="p4">
+        <div class="card-head"><span class="idx">04</span><h3>Longest Subarray with Sum K</h3></div>
+        <div class="tags"><span class="tag">prefix sum + hashmap</span><span class="tag">sliding window*</span></div>
+        <p class="idea">Better: prefix sum in a hashmap, storing the <em>first</em> index each sum was seen. Optimal (conditional): two-pointer window that shrinks from the left when the running sum exceeds <code>k</code>.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>The sliding-window version only works with <b>non-negative</b> elements — negatives make the window sum non-monotonic, so shrinking can jump past the real answer. See a negative number anywhere in the array, and it's prefix-sum + hashmap or nothing.</p></div>
+      </article>
+
+      <article class="card" id="p5">
+        <div class="card-head"><span class="idx">05</span><h3>Two Sum</h3></div>
+        <div class="tags"><span class="tag">hashmap</span><span class="tag">two pointer</span></div>
+        <p class="idea">One pass with a value→index hashmap gives <code>O(n)</code> lookup of the complement. If only the <em>values</em> matter (not original indices), sort and converge two pointers from both ends instead.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Sorting destroys original indices — pick the approach based on what the problem actually returns: indices vs. existence/values. This distinction is the whole reason "2 types of the same problem" gets called out in the title.</p></div>
+      </article>
+
+      <article class="card" id="p6">
+        <div class="card-head"><span class="idx">06</span><h3>Sort 0s, 1s, 2s (Dutch National Flag)</h3></div>
+        <div class="tags"><span class="tag">three-way partition</span></div>
+        <p class="idea">Three pointers — <code>low</code>, <code>mid</code>, <code>high</code>. Swap 0s toward the front, leave 1s alone, swap 2s toward the back.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Only advance <code>mid</code> when it's safe: after swapping with <code>high</code>, the new value landing at <code>mid</code> is unknown, so recheck it before moving on — don't blindly increment. This exact partition is the backbone of quicksort's 3-way partitioning; worth knowing cold.</p></div>
+      </article>
+
+      <article class="card" id="p7">
+        <div class="card-head"><span class="idx">07</span><h3>Majority Element I (&gt; n/2)</h3></div>
+        <div class="tags"><span class="tag">Boyer–Moore voting</span></div>
+        <p class="idea">Keep a candidate and a count. Match → increment; mismatch → decrement; count hits 0 → switch candidates. <code>O(n)</code> time, <code>O(1)</code> space.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Voting only <em>finds a candidate</em> — it guarantees correctness solely because a majority element (&gt;n/2) is promised to exist. If existence isn't guaranteed, you must add a verification pass, or you'll confidently return garbage.</p></div>
+      </article>
+
+      <article class="card" id="p8">
+        <div class="card-head"><span class="idx">08</span><h3>Kadane's Algorithm</h3></div>
+        <div class="tags"><span class="tag">running sum reset</span></div>
+        <p class="idea">Carry a running sum; reset it to 0 the moment it goes negative; track the max seen along the way.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>If the subarray must be non-empty and the array is all-negative, the reset-to-0 rule hides the true answer — track the max single element as a fallback. To <em>print</em> the subarray (not just its sum), record start/end indices at the moment a new max is set, not at the reset.</p></div>
+      </article>
+
+      <article class="card" id="p9">
+        <div class="card-head"><span class="idx">09</span><h3>Rearrange Array Elements by Sign</h3></div>
+        <div class="tags"><span class="tag">alternate placement</span></div>
+        <p class="idea">Equal counts: single pass, positives to even indices, negatives to odd indices, in a new array. Unequal counts: split into two lists, interleave the equal-length prefix, append the leftovers in original order.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Doing this fully in-place (no extra array) forces shifting and breaks the linear-time bound — trading <code>O(n)</code> space for a guaranteed <code>O(n)</code> time is the correct call here, not a shortcut.</p></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= RUNG 2 ================= -->
+  <section class="rung" data-tier="core" id="rung-2">
+    <div class="rung-head">
+      <span class="rung-num">Rung 2</span>
+      <h2 class="rung-title">Core patterns — prefix sums, ordering tricks, matrix ops</h2>
+      <p class="rung-note">The building blocks compose now: sorting as a setup step, prefix sums as a lookup structure, and in-place matrix manipulation where the "extra space" is hiding in the input itself.</p>
+    </div>
+    <div class="cards">
+
+      <article class="card" id="p10">
+        <div class="card-head"><span class="idx">10</span><h3>Best Time to Buy &amp; Sell Stock</h3></div>
+        <div class="tags"><span class="tag">min-tracking</span></div>
+        <p class="idea">Track the minimum price seen so far; at each day, compute <code>price − minSoFar</code> and keep the max.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>This only covers <b>one</b> buy and <b>one</b> sell. Order is enforced for free by scanning left-to-right — the min you compare against always occurred on an earlier day, so you can never "sell before you buy" by accident.</p></div>
+      </article>
+
+      <article class="card" id="p11">
+        <div class="card-head"><span class="idx">11</span><h3>Next Permutation</h3></div>
+        <div class="tags"><span class="tag">break-point</span><span class="tag">suffix reverse</span></div>
+        <p class="idea">Scan from the right for the first index <code>i</code> where <code>arr[i] &lt; arr[i+1]</code> (the break point). Find the rightmost element past <code>i</code> still greater than <code>arr[i]</code>, swap, then reverse everything after <code>i</code>.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>No break point means the array is fully descending — that's the <em>last</em> permutation, so reversing the whole thing wraps around to the smallest one. Doing the reverse before the swap (instead of after) is the most common way this goes wrong.</p></div>
+      </article>
+
+      <article class="card" id="p12">
+        <div class="card-head"><span class="idx">12</span><h3>Leaders in an Array</h3></div>
+        <div class="tags"><span class="tag">right-to-left scan</span></div>
+        <p class="idea">Traverse from the right holding a running max; an element is a leader if it's greater than everything to its right.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Scanning left-to-right forces an <code>O(n²)</code> recheck of "everything to the right" at every index. Flipping the direction turns that recheck into one running variable — and the last element is always a leader, no comparison needed.</p></div>
+      </article>
+
+      <article class="card" id="p13">
+        <div class="card-head"><span class="idx">13</span><h3>Longest Consecutive Sequence</h3></div>
+        <div class="tags"><span class="tag">hash set</span><span class="tag">start detection</span></div>
+        <p class="idea">Put every element in a hash set. For each element that is a <em>sequence start</em> (i.e. <code>num-1</code> is not in the set), count forward how long the run continues.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Skipping the "is this a start" check is the classic mistake — without it, every element re-walks its own sequence from scratch, and an algorithm that looks <code>O(n)</code> silently degrades to <code>O(n²)</code>.</p></div>
+      </article>
+
+      <article class="card" id="p14">
+        <div class="card-head"><span class="idx">14</span><h3>Set Matrix Zeroes</h3></div>
+        <div class="tags"><span class="tag">in-place markers</span></div>
+        <p class="idea">Skip the separate visited-matrix and instead use the matrix's own first row and first column as marker arrays for which rows/columns need zeroing, applied in a final pass.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Row 0 and column 0 share one marker cell, <code>[0][0]</code> — you need one extra boolean flag for "does column 0 itself need zeroing," or its marker collides with row 0's and corrupts the result.</p></div>
+      </article>
+
+      <article class="card" id="p15">
+        <div class="card-head"><span class="idx">15</span><h3>Rotate Matrix by 90°</h3></div>
+        <div class="tags"><span class="tag">transpose + reverse</span></div>
+        <p class="idea">Transpose the matrix in place (swap across the diagonal), then reverse each row for a clockwise rotation.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Transpose only the upper triangle against the lower — mirroring the whole matrix double-swaps and cancels itself out. Reverse <em>columns</em> instead of rows to flip the rotation to counter-clockwise.</p></div>
+      </article>
+
+      <article class="card" id="p16">
+        <div class="card-head"><span class="idx">16</span><h3>Spiral Traversal of a Matrix</h3></div>
+        <div class="tags"><span class="tag">shrinking boundaries</span></div>
+        <p class="idea">Maintain four boundaries — top, bottom, left, right. Walk one side, then shrink that boundary inward and move to the next side.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Before walking the <em>third and fourth</em> sides of each loop, re-check <code>top ≤ bottom</code> and <code>left ≤ right</code> — skip that guard and a non-square or odd-dimension matrix will revisit or skip cells.</p></div>
+      </article>
+
+      <article class="card" id="p17">
+        <div class="card-head"><span class="idx">17</span><h3>Count Subarrays with Sum K</h3></div>
+        <div class="tags"><span class="tag">prefix sum + frequency map</span></div>
+        <p class="idea">Keep a running prefix sum and a hashmap of how many times each prefix sum has occurred. At each step, add <code>map[prefixSum - k]</code> to the running count.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Unlike sliding window, this handles negative numbers. Seed the map with <code>{0: 1}</code> before the loop starts — otherwise subarrays beginning at index 0 get silently undercounted.</p></div>
+      </article>
+
+      <article class="card" id="p18">
+        <div class="card-head"><span class="idx">18</span><h3>Pascal's Triangle</h3></div>
+        <div class="tags"><span class="tag">iterative nCr</span></div>
+        <p class="idea">Three variants — single cell via nCr, a full row built iteratively, or the whole triangle. Build nCr as <code>ans = ans * (r-i) / (i+1)</code> rather than computing raw factorials.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Raw factorials overflow fast even for modest row numbers. The multiply-then-divide form keeps every intermediate value small and stays exact, because each step is guaranteed evenly divisible before the next multiply.</p></div>
+      </article>
+
+      <article class="card" id="p19">
+        <div class="card-head"><span class="idx">19</span><h3>Majority Element II (&gt; n/3)</h3></div>
+        <div class="tags"><span class="tag">extended Boyer–Moore</span></div>
+        <p class="idea">At most <b>two</b> elements can occur more than n/3 times — extend Moore's voting to track two candidates and two counts side by side.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>The voting pass only produces <em>candidates</em>, never a guarantee — always recount both in a second pass. A candidate can survive every vote without ever actually crossing the n/3 threshold.</p></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= RUNG 3 ================= -->
+  <section class="rung" data-tier="comb" id="rung-3">
+    <div class="rung-head">
+      <span class="rung-num">Rung 3</span>
+      <h2 class="rung-title">Combinatorial search — multi-pointer &amp; hashing</h2>
+      <p class="rung-note">Sorting stops being optional and starts being the enabler: it's what makes multi-pointer search and clean duplicate-skipping possible at all.</p>
+    </div>
+    <div class="cards">
+
+      <article class="card" id="p20">
+        <div class="card-head"><span class="idx">20</span><h3>3Sum</h3></div>
+        <div class="tags"><span class="tag">sort + two pointer</span></div>
+        <p class="idea">Sort the array, fix one element, then two-pointer the rest from both ends looking for the complement sum.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Skip duplicate values for the fixed index <em>and</em> for each pointer after a match, or the same triplet gets emitted repeatedly. This duplicate-skipping logic — not the two-pointer idea itself — is what people fumble under pressure.</p></div>
+      </article>
+
+      <article class="card" id="p21">
+        <div class="card-head"><span class="idx">21</span><h3>4Sum</h3></div>
+        <div class="tags"><span class="tag">sort + nested two pointer</span></div>
+        <p class="idea">Same shape as 3Sum, one level deeper: fix two elements, two-pointer the remaining two.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Summing four values can overflow 32-bit range even when each value looks modest — widen the type before adding. Duplicate-skipping now has to happen correctly at <em>four</em> nested levels instead of two.</p></div>
+      </article>
+
+      <article class="card" id="p22">
+        <div class="card-head"><span class="idx">22</span><h3>Subarrays with XOR K</h3></div>
+        <div class="tags"><span class="tag">prefix XOR + frequency map</span></div>
+        <p class="idea">Same shape as prefix-sum counting, but with XOR: keep a running prefix XOR and a frequency map, adding <code>map[prefixXOR ^ k]</code> at each step, using <code>x ^ k ^ k = x</code>.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>It "smells like" a sliding-window problem because it's about subarrays, but XOR has no monotonic ordering to shrink or grow against — the prefix-hashmap trick is the only way in, same as sum-K but for a different operator.</p></div>
+      </article>
+
+      <article class="card" id="p23">
+        <div class="card-head"><span class="idx">23</span><h3>Merge Overlapping Intervals</h3></div>
+        <div class="tags"><span class="tag">sort-first scan</span></div>
+        <p class="idea">Sort intervals by start time, then walk once, merging the current interval into the last kept one whenever its start is <code>≤</code> the last interval's end.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>The whole problem collapses to a one-line comparison only <em>because</em> of the sort. Skipping it is the single most common reason a "correct-looking" merge quietly misses overlaps.</p></div>
+      </article>
+
+      <article class="card" id="p24">
+        <div class="card-head"><span class="idx">24</span><h3>Merge Two Sorted Arrays (no extra space)</h3></div>
+        <div class="tags"><span class="tag">gap method</span></div>
+        <p class="idea">Treat both arrays as one virtual array; compare-and-swap elements a "gap" apart, starting at <code>gap = ceil(total/2)</code> and halving the gap each pass down to 0.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>This is Shell sort's shrinking-gap idea, repurposed. It trades a bit of conceptual overhead for genuine <code>O(1)</code> extra space — the naive "insert and shift" approach can't hit that bound without <code>O(n·m)</code> time.</p></div>
+      </article>
+
+      <article class="card" id="p25">
+        <div class="card-head"><span class="idx">25</span><h3>Find the Missing and Repeating Number</h3></div>
+        <div class="tags"><span class="tag">sum/square equations</span><span class="tag">XOR split</span></div>
+        <p class="idea">Two clean approaches: solve two equations (sum and sum-of-squares differences) for the two unknowns, or XOR every array value with every number <code>1..n</code>, then split the result by its lowest set bit to separate the missing value from the repeated one.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>The sum-of-squares approach overflows quickly for larger <code>n</code>, since it squares values before combining. XOR avoids that ceiling entirely but is the more fiddly of the two to derive correctly under pressure.</p></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= RUNG 4 ================= -->
+  <section class="rung" data-tier="hard" id="rung-4">
+    <div class="rung-head">
+      <span class="rung-num">Rung 4</span>
+      <h2 class="rung-title">Hard mode — merge-sort counting tricks</h2>
+      <p class="rung-note">The same divide-and-conquer skeleton, reused for three different counting conditions. Once the template clicks, all three stop looking like separate problems.</p>
+    </div>
+    <div class="cards">
+
+      <article class="card" id="p26">
+        <div class="card-head"><span class="idx">26</span><h3>Count Inversions</h3></div>
+        <div class="tags"><span class="tag">modified merge sort</span></div>
+        <p class="idea">Count pairs where <code>i&lt;j</code> but <code>arr[i]&gt;arr[j]</code> by piggybacking on merge sort's merge step: whenever an element from the right half is placed before one from the left half, <em>every</em> remaining left-half element forms an inversion with it.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>This is the template for a whole family of "count pairs with some ordering condition" problems. The insight to hold onto: each half is already sorted by the time you merge, so counting comes free instead of costing a second pass.</p></div>
+      </article>
+
+      <article class="card" id="p27">
+        <div class="card-head"><span class="idx">27</span><h3>Reverse Pairs</h3></div>
+        <div class="tags"><span class="tag">modified merge sort</span><span class="tag">two-phase</span></div>
+        <p class="idea">Same merge-sort skeleton as counting inversions, but the condition is <code>arr[i] &gt; 2·arr[j]</code> — counted in a <em>separate</em> two-pointer pass over the two already-sorted halves, run before the actual merge step.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>Unlike inversions, this condition isn't compatible with the merge pointers directly, because <code>2·arr[j]</code> breaks the monotonic relationship the merge relies on. That's why counting needs its own pass before merging, not fused into it — forgetting this split is the #1 way this problem goes wrong.</p></div>
+      </article>
+
+      <article class="card" id="p28">
+        <div class="card-head"><span class="idx">28</span><h3>Maximum Product Subarray</h3></div>
+        <div class="tags"><span class="tag">running max + min</span></div>
+        <p class="idea">Kadane's doesn't work as-is — two negatives multiply into a positive. Carry <em>both</em> a running max and a running min ending at the current index; a very negative min can flip into the new max on the next negative multiplier.</p>
+        <div class="nuance"><span class="label">NUANCE</span><p>A zero must reset both running max and min back to the current element — the product breaks entirely across a zero. Equivalent alternative: scan prefix products and suffix products; a zero only cancels the run on its own side, and the answer is the best prefix or suffix product seen anywhere.</p></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= PATTERNS INDEX ================= -->
+  <section class="patterns">
+    <h2>Recurring patterns</h2>
+    <p>The 28 problems really only draw from a handful of underlying moves. Once one of these clicks, it unlocks several problems at once — that's the actual leverage in working through the playlist in order.</p>
+
+    <div class="ptable">
+      <div class="prow">
+        <div><div class="pname">Two pointer / converging ends</div><div class="plinks"><a href="#p1">01</a> <a href="#p2">02</a> <a href="#p5">05</a> <a href="#p6">06</a> <a href="#p20">20</a> <a href="#p21">21</a></div></div>
+        <div class="pdesc">Start from both ends (or slow/fast) and move inward based on a comparison. Needs the array sorted for the sum/search variants.</div>
+      </div>
+      <div class="prow">
+        <div><div class="pname">Prefix sum / prefix XOR + hashmap</div><div class="plinks"><a href="#p4">04</a> <a href="#p17">17</a> <a href="#p22">22</a></div></div>
+        <div class="pdesc">Store running aggregates in a map keyed by the aggregate itself. Works with negatives, where sliding window can't follow. Always seed the map with the identity value at count 1.</div>
+      </div>
+      <div class="prow">
+        <div><div class="pname">Sliding window — non-negative only</div><div class="plinks"><a href="#p4">04</a></div></div>
+        <div class="pdesc">Shrink-from-the-left window is only valid when the running quantity is monotonic. One negative number in the input and the whole approach silently breaks.</div>
+      </div>
+      <div class="prow">
+        <div><div class="pname">Boyer–Moore voting</div><div class="plinks"><a href="#p7">07</a> <a href="#p19">19</a></div></div>
+        <div class="pdesc">Cancel out unequal pairs to surface a majority candidate in one pass. Always needs a verification pass unless existence is explicitly guaranteed.</div>
+      </div>
+      <div class="prow">
+        <div><div class="pname">XOR cancellation</div><div class="plinks"><a href="#p3">03</a> <a href="#p22">22</a> <a href="#p25">25</a></div></div>
+        <div class="pdesc"><code>a^a=0</code> and <code>a^0=a</code> — the go-to whenever a sum-based approach risks overflow.</div>
+      </div>
+      <div class="prow">
+        <div><div class="pname">Sort-first linear scan</div><div class="plinks"><a href="#p20">20</a> <a href="#p21">21</a> <a href="#p23">23</a></div></div>
+        <div class="pdesc">Sorting turns an otherwise quadratic search into one pass, and makes duplicate-skipping mechanical instead of ad hoc.</div>
+      </div>
+      <div class="prow">
+        <div><div class="pname">In-place matrix reuse</div><div class="plinks"><a href="#p14">14</a> <a href="#p15">15</a> <a href="#p16">16</a></div></div>
+        <div class="pdesc">The matrix's own edges (first row/column, diagonal, boundary pointers) double as the scratch space, avoiding an auxiliary structure.</div>
+      </div>
+      <div class="prow">
+        <div><div class="pname">Modified merge sort (divide &amp; conquer counting)</div><div class="plinks"><a href="#p26">26</a> <a href="#p27">27</a></div></div>
+        <div class="pdesc">Piggyback a counting condition on merge sort's merge step. Works directly when the condition matches the merge pointers' movement; needs a separate pass first when it doesn't (Reverse Pairs).</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Built from <a href="https://www.youtube.com/playlist?list=PLgUwDviBIf0rENwdL0nEH0uGom9no0nyB" target="_blank" rel="noopener">take U forward's Arrays Playlist</a> (28 videos, ordered basics → advanced). Complexity notes assume standard array/hashmap operations; verify edge cases (empty input, all-duplicate, all-negative) against your exact problem statement before an interview.
+  </footer>
+
+</div>
+</body>
+</html>
